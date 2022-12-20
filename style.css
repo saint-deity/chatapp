@@ -66,6 +66,9 @@ ul li {
 #message { display: flex; flex-direction: column; justify-content: left; align-items: left; border-radius: .2vw; padding: 1vw; padding-top: 0px; top: 1vw; position: relative; height: 100%; width: 96.5%; transition: .3s; margin-top: 1.5vh; }
 
 #message-head { margin-top: 0; margin-left: .5vw; }
+
+    #timestamp { font-size: 1vw; color: var(--greysecondary); }
+
 #message-content { margin-top: -.8vh; margin-left: .5vw; }
 #footer { bottom: 0; position: relative; height: 11vh; width: 100%; background-color: var(--greymain); }
 
