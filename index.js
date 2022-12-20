@@ -8,31 +8,11 @@ app.use(express.json());
 
 let usersConnected = 0;
 
-let data = [ 
-  {
-    name: "Anon",
-    avatar: "",
-    id: 1,
-
-    timestamp: Date.now(),
-    content: "Hm.",
-  },
-
-  {
-      name: "Anon",
-      avatar: "",
-      id: 2,
-
-      timestamp: Date.now(),
-      content: "Hm, indeed.",
-  },
-];
+let data = [];
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
-  // server style sheet
   app.use('/style.css', express.static(__dirname + '/style.css'));
-  // serve socket.io client library
   app.use('/socket.io', express.static(__dirname + '/node_modules/socket.io/client-dist/'));
 });
 
@@ -41,10 +21,20 @@ app.get('/data', function(req, res) {
 });
 
 app.post('/data', function(req, res) {
-  console.log("post request received");
+  console.log("post request received")
 
-  let message = req.body.data;
-  data.push(JSON.parse(message));
+  let old = JSON.parse(req.body.data);
+
+  let message = {
+    name: old.name,
+    avatar: old.avatar,
+    id: Math.floor(Math.random() * 89999999999999999) + 10000000000000000,
+    
+    timestamp: Date.now(),
+    content: old.content,
+  }
+
+  data.push(message);
 
   io.emit('update', data);
   res.json(data);
