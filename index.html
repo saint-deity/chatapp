@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>Chat Site</title>
+    <meta charset="utf-8" />
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <!-- get socket io from server -->
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+
+   <body>
+    <section id="containerDisplay">
+      <section id="columnContainerServers">
+         
+      </section>
+
+      <section id="containerServer">
+        <section id="containerList">
+          <section id="containerListHeader">
+            <h2 id="serverName">
+
+            </h2>
+          </section>
+
+            <section id="containerListBody">
+              <section id="severBody">
+                <section class="messageBody">
+                  <section id="messagesHeader">
+
+                  </section>
+
+                  <section id="username">
+                    <input type="text" id="usernameInput" placeholder="Username" maxlength="14" />
+                  </section>
+
+                  <nav>
+                    <ul>
+
+                    </ul>
+                  </nav>
+
+                  <section id="messagesFooter">
+
+                  </section>
+
+                  <section id="messageFooter">
+
+                  </section>
+                </section>
+
+                <section id="messageHeader">
+
+                </section>
+                      
+                <section id="messagesContainer">
+                  <section id="inputContainer">
+                    <textarea id="messageInput" placeholder="Message #TextChat"></textarea>
+                  </section>
+                          
+                  <section id="buttonContainer">
+                    <a id="messageSend">
+                      <svg id="messageButton" xmlns="http://www.w3.org/2000/svg" version="1.0" width="50.000000pt" height="50.000000pt" viewBox="0 0 40 40" preserveAspectRatio="xMidYMid meet">
+                        <g id="sendVector"  transform="translate(0.000000,32.000000) scale(0.100000,-0.100000)" style="opacity: 50%; stroke: 0; fill: #fff;">
+                        <path d="M91 200 c9 -24 17 -30 40 -30 16 0 29 -4 29 -10 0 -5 -13 -10 -29 -10 -23 0 -31 -6 -40 -30 -5 -16 -6 -30 -2 -30 18 0 141 61 141 70 0 9 -123 70 -141 70 -4 0 -3 -13 2 -30z"/>
+                      </g>
+                    </svg>
+                  </a>
+                </section>
+              </section>
+            </section>
+
+            <section id="containerHeader">
+
+            </section>
+          </section>
+        </section> 
+      </section>
+    </section>
+
+    <script type='text/javascript' async defer>
+      function addMessage(message) {
+        let msgs = document.querySelector('nav ul');
+        let inner = `
+        <li id="message">
+          <div id="message-head">
+            <h2>${message.name}    <span>${message.timestamp}</span></h2>
+            </div>
+
+            <div id="message-content">
+              ${message.content}
+            </div>
+        </li>
+        `
+
+        msgs.insertAdjacentHTML('beforeend', inner);
+      }
+
+      function loadMessages(data) {
+        let textContainer = document.querySelector('nav ul');
+        textContainer.innerHTML = '';
+
+        console.log(data);
+        for (let message of data) {
+          addMessage(message);
+        }
+      }
+
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', '/data', true);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          loadMessages(data);
+        }
+      };
+
+      xhr.send();
+
+      let submitButton = document.getElementById('messageSend');
+      submitButton.addEventListener('click', function() {
+        let message = document.getElementById('messageInput').value;
+        let username = document.getElementById('usernameInput').value;
+
+        // profiling
+        
+        if (username.length < 1) {
+          username = 'Anonymous';
+        }
+
+        let upr = {
+          name: username,
+          content: message,
+          timestamp: new Date().toLocaleTimeString()
+        }
+
+        document.getElementById('messageInput').value = '';
+
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '/data', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('data=' + encodeURIComponent(JSON.stringify(upr)));
+
+        document.getElementById('messageButton').style = 'fill: #949cf7; opacity: 20%';
+
+        document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight, behavior: 'smooth' });
+      });
+
+      io().emit('message', 'hello world');
+      io().on('update', function(data) {
+        loadMessages(data);
+      });
+    </script>
+
+    <script defer>
+      var isInput = false;
+
+      document.getElementById('messageInput').addEventListener('input', function() { if (this.value.length > 0) { isInput = true; } else { isInput = false; } document.getElementById('messageButton').style.opacity = event.target.value.length > 0 ? 1 : 0.3 })
+
+      document.getElementById('messageSend').addEventListener('mouseover', function() { if (isInput) { document.getElementById('sendVector').style = 'fill: #949cf7; opacity: 100%; cursor: pointer;'; document.getElementById('buttonContainer').style = 'cursor: pointer;' } })
+
+      document.getElementById('messageSend').addEventListener('mouseout', function() { if (isInput) { document.getElementById('sendVector').style = 'fill: #fff; opacity: 100%;'; document.getElementById('buttonContainer').style = 'cursor: pointer;' } })
+
+      document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight, behavior: 'smooth' });
+    </script>
+  </body>
+</html>
