@@ -82,20 +82,66 @@
 
     <script type='text/javascript' async defer>
       function addMessage(message) {
+        console.log(message.id)
         let msgs = document.querySelector('nav ul');
+        // check if timestamp is older than 24 hours
+        let date = new Date(message.timestamp);
+        let now = new Date();
+        let diff = now - date;
+        let days = Math.floor(diff / 1000 / 60 / 60 / 24);
+
+        let tmp = '';
+        // if older than 24 hours, display date
+        if (days > 0) {
+          tmp = date.toLocaleDateString();
+        }
+
+        // get date for locale timestamp as hh:mm
+        let hrs = new Date().getHours();
+        let mins = new Date().getMinutes();
+        let stamp = '';
+        if (hrs > 12) {
+          hrs -= 12;
+          stamp = 'PM';
+        } else {
+          stamp = 'AM';
+        }
+
+        if (hrs < 10) {
+          hrs = '0' + hrs;
+        }
+
+        if (mins < 10) {
+          mins = '0' + mins;
+        }
+
+        let newDate = '';
+        if (tmp.length > 0) {
+          newDate = tmp;
+        } else {
+          newDate = 'Today at ' + hrs + ':' + mins + ' ' + stamp;
+        }
+
         let inner = `
-        <li id="message">
+        <li id="message${message.id}">
           <div id="message-head">
-            <h2>${message.name}    <span>${message.timestamp}</span></h2>
+            <h2>${message.name}    <span id="timestamp">${newDate}</span></h2>
             </div>
 
             <div id="message-content">
-              ${message.content}
             </div>
         </li>
         `
 
         msgs.insertAdjacentHTML('beforeend', inner);
+
+        // prevent XSS
+        let content = document.getElementById('message' + message.id).querySelector('#message-content');
+        content.textContent = message.content;
+
+        // scroll to bottom
+        let container = document.querySelector('nav');
+        container.scrollTop = container.scrollHeight;
       }
 
       function loadMessages(data) {
@@ -133,7 +179,7 @@
         let upr = {
           name: username,
           content: message,
-          timestamp: new Date().toLocaleTimeString()
+          timestamp: new Date(),
         }
 
         document.getElementById('messageInput').value = '';
