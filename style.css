@@ -53,6 +53,7 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    margin-top: 29vh;
 }
 
 ul li {
@@ -68,6 +69,13 @@ ul li {
 #message-head { margin-top: 0; margin-left: .5vw; }
 
     #timestamp { font-size: 1vw; color: var(--greysecondary); }
+
+    #timestampHint { font-size: 1vw; color: var(--white); width: fit-content; height: fit-content; padding: .8vw; border-radius: .2vw; background-color: var(--greysenary); position: relative; left: -15vw; top: -6vh; opacity: 100%; box-shadow: 0 0 1vw var(--greysenary); opacity: 0; pointer-events: none; transition: .3s; }
+
+        #timestamp:hover #timestampHint { opacity: 100%; }
+
+    #timestampHintArrow { font-size: 1vw; color: var(--greysenary); width: 1vw;  height: 1vw; border-radius: .2vw; background-color: var(--greysenary); position: absolute; left: 50%; top: 80%; opacity: 100%; transform: rotate(45deg); z-index: -1; }
+
 
 #message-content { margin-top: -.8vh; margin-left: .5vw; }
 #footer { bottom: 0; position: relative; height: 11vh; width: 100%; background-color: var(--greymain); }
@@ -120,7 +128,7 @@ ul li {
                   background-color: var(--greysenary);
                 }
                     
-                    #messageBody { width: 83%; height: 3vh; position: fixed; bottom: 0; right: 0; background-color: var(--blurplesecondary); opacity: 50%; overflow-y: scroll; padding-bottom: 5vh; scrollbar-width: none; }
+                    #messageBody { width: 83%; height: 3vh; position: fixed; bottom: 0; right: 0; background-color: var(--blurplesecondary); opacity: 50%; overflow-y: scroll; padding-bottom: 5vh; scrollbar-width: none; margin-top: 1.5vh; }
 
                         #messagesHeader { top: 0; width: 83%; height: 31vh; position: relative; }
 
