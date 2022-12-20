@@ -125,7 +125,7 @@
         let inner = `
         <li id="message${message.id}">
           <div id="message-head">
-            <h2>${message.name}    <span id="timestamp" style="font-size: 1vw; color: #40444b;">${newDate}</span></h2>
+            <h2>${message.name}    <span id="timestamp">${newDate}</span></h2>
             </div>
 
             <div id="message-content">
@@ -133,7 +133,22 @@
         </li>
         `
 
+        // add timestamp hint with Day, Calendar Day, Calendar Months Name, Year, Time
+        // i.e. Wednesday, 12th December 2018, 12:00
+        
+        let hint = `
+        <span id="timestampHint">
+          <div id="timestampHintArrow">.</div>
+          <span id="hintText">${date.toLocaleDateString('en-US', { weekday: 'long' })}, ${date.toLocaleDateString('en-US', { day: 'numeric' })} ${date.toLocaleDateString('en-US', { month: 'long' })} ${date.toLocaleDateString('en-US', { year: 'numeric' })} ${hrs+":"+mins}<span>
+          </span>
+        `
+
         msgs.insertAdjacentHTML('beforeend', inner);
+
+        // add hint to timestamp
+        let timestamp = document.getElementById('message' + message.id).querySelector('#timestamp');
+
+        timestamp.insertAdjacentHTML('beforeend', hint);
 
         // prevent XSS
         let content = document.getElementById('message' + message.id).querySelector('#message-content');
