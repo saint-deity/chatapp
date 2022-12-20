@@ -76,7 +76,7 @@
 
             </section>
           </section>
-        </section>
+        </section> 
       </section>
     </section>
 
@@ -121,14 +121,14 @@
         } else {
           newDate = 'Today at ' + hrs + ':' + mins + ' ' + stamp;
         }
- 
+
         let inner = `
         <li id="message${message.id}">
           <div id="message-head">
             <h2>${message.name}    <span id="timestamp">${newDate}</span></h2>
             </div>
 
-            <div id="message-content">
+            <div id="message-content"> 
             </div>
         </li>
         `
@@ -150,9 +150,21 @@
 
         timestamp.insertAdjacentHTML('beforeend', hint);
 
-        // prevent XSS
         let content = document.getElementById('message' + message.id).querySelector('#message-content');
-        content.textContent = message.content;
+
+        // if first argument is @rainbow-font, insert span with rainbow class
+
+        let rainbow = message.content.split(' ')[0];
+        if (rainbow === '@rainbow-font') {
+          let rainbowText = message.content.split(' ').slice(1).join(' ');
+          content.innerHTML = `<span class="rainbow"></span>`;
+          let rainbowSpan = content.querySelector('.rainbow');
+          rainbowSpan.textContent = rainbowText;
+        } else {
+          content.textContent = message.content;
+        }
+
+        // prevent XSS
 
         // scroll to bottom
         let container = document.querySelector('nav');
