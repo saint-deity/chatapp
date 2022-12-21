@@ -8,31 +8,12 @@ app.use(express.json());
 
 let usersConnected = 0;
 
-let data = [ 
-  {
-    name: "Anon",
-    avatar: "",
-    id: 1,
-
-    timestamp: Date.now(),
-    content: "Hm.",
-  },
-
-  {
-      name: "Anon",
-      avatar: "",
-      id: 2,
-
-      timestamp: Date.now(),
-      content: "Hm, indeed.",
-  },
-];
+let data = [];
+let sockets = [];
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
-  // server style sheet
   app.use('/style.css', express.static(__dirname + '/style.css'));
-  // serve socket.io client library
   app.use('/socket.io', express.static(__dirname + '/node_modules/socket.io/client-dist/'));
 });
 
@@ -41,19 +22,66 @@ app.get('/data', function(req, res) {
 });
 
 app.post('/data', function(req, res) {
-  console.log("post request received");
+  console.log("post request received")
 
-  let message = req.body.data;
-  data.push(JSON.parse(message));
+  let old = JSON.parse(req.body.data);
+  let socketID = old.family_gathering;
+
+  if (!socketID) {
+    res.json(data);
+    return;
+  }
+
+  for (let i = 0; i < sockets.length; i++) {
+    if (sockets[i].id == socketID) {
+      let lastMessage = sockets[i].lastMessage;
+      if (lastMessage + 1500 > Date.now()) {
+        console.log("too many requests");
+        console.log(socketID)
+        io.emit('slow_down', socketID);
+        res.json(data);
+        return;
+      } else {
+        sockets[i].lastMessage = Date.now();
+      }
+    }
+  }
+
+  if (old.name.length > 20) {
+    old.name = old.name.substring(0, 20);
+  }
+
+  if (old.content.length > 1000) {
+    old.content = old.content.substring(0, 1000);
+  }
+
+  let message = {
+    name: old.name,
+    avatar: old.avatar,
+    id: Math.floor(Math.random() * 89999999999999999) + 10000000000000000,
+    
+    timestamp: Date.now(),
+    content: old.content,
+  }
+
+  data.push(message);
 
   io.emit('update', data);
   res.json(data);
 });
 
 io.on('connection', function(socket) {
+  socket.emit('family_gathering', socket.client.id);
   console.log('a user connected');
-  socketID = socket.client.id;
+  let socketID = socket.client.id;
   socket.join(socketID);
+
+  let socketData = {
+    id: socketID,
+    lastMessage: 0,
+  }
+
+  sockets.push(socketData);
 
   usersConnected++;
   console.log(usersConnected + " users connected");

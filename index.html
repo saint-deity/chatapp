@@ -33,7 +33,7 @@
                   </section>
 
                   <section id="username">
-                    <input type="text" id="usernameInput" placeholder="Username" maxlength="14" />
+                    <input type="text" id="usernameInput" placeholder="Username" maxlength="20" />
                   </section>
 
                   <nav>
@@ -82,20 +82,82 @@
 
     <script type='text/javascript' async defer>
       function addMessage(message) {
+        console.log(message.id)
         let msgs = document.querySelector('nav ul');
+
+        let date = new Date(message.timestamp);
+        let now = new Date();
+        let diff = now - date;
+        let days = Math.floor(diff / 1000 / 60 / 60 / 24);
+
+        let tmp = '';
+
+        if (days > 0) {
+          tmp = date.toLocaleDateString();
+        }
+
+        let hrs = new Date().getHours();
+        let mins = new Date().getMinutes();
+        let stamp = '';
+        if (hrs > 12) {
+          hrs -= 12;
+          stamp = 'PM';
+        } else {
+          stamp = 'AM';
+        }
+
+        if (hrs < 10) {
+          hrs = '0' + hrs;
+        }
+
+        if (mins < 10) {
+          mins = '0' + mins;
+        }
+
+        let newDate = '';
+        if (tmp.length > 0) {
+          newDate = tmp;
+        } else {
+          newDate = 'Today at ' + hrs + ':' + mins + ' ' + stamp;
+        }
+
         let inner = `
-        <li id="message">
+        <li id="message${message.id}">
           <div id="message-head">
-            <h2>${message.name}    <span>${message.timestamp}</span></h2>
+            <h2>${message.name}    <span id="timestamp">${newDate}</span></h2>
             </div>
 
-            <div id="message-content">
-              ${message.content}
+            <div id="message-content"> 
             </div>
         </li>
         `
+        
+        let hint = `
+        <span id="timestampHint">
+          <div id="timestampHintArrow">.</div>
+          <span id="hintText">${date.toLocaleDateString('en-US', { weekday: 'long' })}, ${date.toLocaleDateString('en-US', { day: 'numeric' })} ${date.toLocaleDateString('en-US', { month: 'long' })} ${date.toLocaleDateString('en-US', { year: 'numeric' })} ${hrs+":"+mins}<span>
+        </span>
+        `
 
         msgs.insertAdjacentHTML('beforeend', inner);
+
+        let timestamp = document.getElementById('message' + message.id).querySelector('#timestamp');
+
+        timestamp.insertAdjacentHTML('beforeend', hint);
+
+        let content = document.getElementById('message' + message.id).querySelector('#message-content');
+
+        let rainbow = message.content.split(' ')[0];
+        if (rainbow === '@rainbow-font') {
+          let rainbowText = message.content.split(' ').slice(1).join(' ');
+          content.innerHTML = `<span class="rainbow"></span>`;
+          let rainbowSpan = content.querySelector('.rainbow');
+          rainbowSpan.textContent = rainbowText;
+        } else {
+          content.textContent = message.content;
+        }
+
+        document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
       }
 
       function loadMessages(data) {
@@ -133,7 +195,8 @@
         let upr = {
           name: username,
           content: message,
-          timestamp: new Date().toLocaleTimeString()
+          timestamp: new Date(),
+          family_gathering: localStorage.getItem('family_gathering'),
         }
 
         document.getElementById('messageInput').value = '';
@@ -146,12 +209,45 @@
 
         document.getElementById('messageButton').style = 'fill: #949cf7; opacity: 20%';
 
-        document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight, behavior: 'smooth' });
+        document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
+
+        document.getElementById('messageInput').focus();
+      });
+
+      document.getElementById('messageInput').addEventListener('keydown', function(e) {
+        if (e.keyCode === 13) {
+          document.getElementById('messageSend').click();
+        }
       });
 
       io().emit('message', 'hello world');
       io().on('update', function(data) {
         loadMessages(data);
+      });
+
+      io().on('family_gathering', function(data) {
+        localStorage.setItem('family_gathering', data);
+        console.log('family_gathering: ' + data);
+      });
+
+      io().on('slow_down', function(data) {
+
+        if (localStorage.getItem('family_gathering') == data ) {
+
+          console.log('wait');
+          let warning = `
+          <span id="warning">
+            ◕ You are sending messages too fast. Slow down!
+          </span>
+          `
+
+          let cont = document.getElementById('inputContainer');
+          cont.insertAdjacentHTML('beforeend', warning);
+
+          setTimeout(function() {
+            document.getElementById('warning').remove();
+          }, 3000);
+        }
       });
     </script>
 
@@ -164,7 +260,7 @@
 
       document.getElementById('messageSend').addEventListener('mouseout', function() { if (isInput) { document.getElementById('sendVector').style = 'fill: #fff; opacity: 100%;'; document.getElementById('buttonContainer').style = 'cursor: pointer;' } })
 
-      document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight, behavior: 'smooth' });
+      document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
     </script>
   </body>
 </html>
