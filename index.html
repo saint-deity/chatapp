@@ -84,18 +84,30 @@
       function addMessage(message) {
         console.log(message.id)
         let msgs = document.querySelector('nav ul');
+<<<<<<< HEAD
 
+=======
+        // check if timestamp is older than 24 hours
+>>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
         let date = new Date(message.timestamp);
         let now = new Date();
         let diff = now - date;
         let days = Math.floor(diff / 1000 / 60 / 60 / 24);
 
         let tmp = '';
+<<<<<<< HEAD
 
+=======
+        // if older than 24 hours, display date
+>>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
         if (days > 0) {
           tmp = date.toLocaleDateString();
         }
 
+<<<<<<< HEAD
+=======
+        // get date for locale timestamp as hh:mm
+>>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
         let hrs = new Date().getHours();
         let mins = new Date().getMinutes();
         let stamp = '';
@@ -139,14 +151,33 @@
         </span>
         `
 
+        // add timestamp hint with Day, Calendar Day, Calendar Months Name, Year, Time
+        // i.e. Wednesday, 12th December 2018, 12:00
+        
+        let hint = `
+        <span id="timestampHint">
+          <div id="timestampHintArrow">.</div>
+          <span id="hintText">${date.toLocaleDateString('en-US', { weekday: 'long' })}, ${date.toLocaleDateString('en-US', { day: 'numeric' })} ${date.toLocaleDateString('en-US', { month: 'long' })} ${date.toLocaleDateString('en-US', { year: 'numeric' })} ${hrs+":"+mins}<span>
+          </span>
+        `
+
         msgs.insertAdjacentHTML('beforeend', inner);
 
+<<<<<<< HEAD
+=======
+        // add hint to timestamp
+>>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
         let timestamp = document.getElementById('message' + message.id).querySelector('#timestamp');
 
         timestamp.insertAdjacentHTML('beforeend', hint);
 
         let content = document.getElementById('message' + message.id).querySelector('#message-content');
 
+<<<<<<< HEAD
+=======
+        // if first argument is @rainbow-font, insert span with rainbow class
+
+>>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
         let rainbow = message.content.split(' ')[0];
         if (rainbow === '@rainbow-font') {
           let rainbowText = message.content.split(' ').slice(1).join(' ');
@@ -157,7 +188,15 @@
           content.textContent = message.content;
         }
 
+<<<<<<< HEAD
         document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
+=======
+        // prevent XSS
+
+        // scroll to bottom
+        let container = document.querySelector('nav');
+        container.scrollTop = container.scrollHeight;
+>>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
       }
 
       function loadMessages(data) {
@@ -196,7 +235,10 @@
           name: username,
           content: message,
           timestamp: new Date(),
+<<<<<<< HEAD
           family_gathering: localStorage.getItem('family_gathering'),
+=======
+>>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
         }
 
         document.getElementById('messageInput').value = '';
