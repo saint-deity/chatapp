@@ -70,11 +70,7 @@ ul li {
 
     #timestamp { font-size: 1vw; color: var(--greysecondary); }
 
-<<<<<<< HEAD
     #timestampHint { font-size: 1vw; color: var(--white); width: fit-content; height: fit-content; padding: .8vw; border-radius: .2vw; background-color: var(--greysenary); position: relative; left: -15vw; top: -6vh; opacity: 100%; box-shadow: 0 0 1vw var(--greysenary); opacity: 0; pointer-events: none; transition: .3s; z-index: 99999; }
-=======
-    #timestampHint { font-size: 1vw; color: var(--white); width: fit-content; height: fit-content; padding: .8vw; border-radius: .2vw; background-color: var(--greysenary); position: relative; left: -15vw; top: -6vh; opacity: 100%; box-shadow: 0 0 1vw var(--greysenary); opacity: 0; pointer-events: none; transition: .3s; }
->>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
 
         #timestamp:hover #timestampHint { opacity: 100%; }
 

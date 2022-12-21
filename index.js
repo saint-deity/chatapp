@@ -9,10 +9,7 @@ app.use(express.json());
 let usersConnected = 0;
 
 let data = [];
-<<<<<<< HEAD
 let sockets = [];
-=======
->>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -28,7 +25,6 @@ app.post('/data', function(req, res) {
   console.log("post request received")
 
   let old = JSON.parse(req.body.data);
-<<<<<<< HEAD
   let socketID = old.family_gathering;
 
   if (!socketID) {
@@ -58,8 +54,6 @@ app.post('/data', function(req, res) {
   if (old.content.length > 1000) {
     old.content = old.content.substring(0, 1000);
   }
-=======
->>>>>>> d8adea7b781e5f63cd0b58265e76c63cecc8268f
 
   let message = {
     name: old.name,
