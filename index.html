@@ -36,6 +36,10 @@
                     <input type="text" id="usernameInput" placeholder="Username" maxlength="20" />
                   </section>
 
+                  <section id="avatar">
+                    <input type="text" id="avatarInput" placeholder="Avatar URL" />
+                  </section>
+
                   <nav>
                     <ul>
 
@@ -68,6 +72,10 @@
                       </g>
                     </svg>
                   </a>
+
+                  <a id="messageAttach">
+                    <svg width="12" height="12" viewBox="0 0 24 24"><path class="attachVector" fill="currentColor" d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z" style="opacity: 50%; stroke: 0; fill: #fff;"></path>></path></svg>
+                  </a>
                 </section>
               </section>
             </section>
@@ -83,6 +91,7 @@
     <script type='text/javascript' async defer>
       function addMessage(message) {
         console.log(message.id)
+
         let msgs = document.querySelector('nav ul');
 
         let date = new Date(message.timestamp);
@@ -123,12 +132,15 @@
 
         let inner = `
         <li id="message${message.id}">
+          <div id="useravi" style="background-image: url('${message.avatar}'); background-repeat: repeat; background-size: 100%; background-position: center;"></div>
           <div id="message-head">
             <h2>${message.name}    <span id="timestamp">${newDate}</span></h2>
             </div>
 
             <div id="message-content"> 
             </div>
+
+            <div id="attachments" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: center; align-content: center;margin-left: 5vw;">
         </li>
         `
         
@@ -147,15 +159,28 @@
 
         let content = document.getElementById('message' + message.id).querySelector('#message-content');
 
-        let rainbow = message.content.split(' ')[0];
-        if (rainbow === '@rainbow-font') {
-          let rainbowText = message.content.split(' ').slice(1).join(' ');
-          content.innerHTML = `<span class="rainbow"></span>`;
-          let rainbowSpan = content.querySelector('.rainbow');
-          rainbowSpan.textContent = rainbowText;
-        } else {
-          content.textContent = message.content;
+        let markdown_reader = message.content.split(' ');
+
+        let marked_message = '';
+        let unmarked_message = '';
+        for (let i = 0; i < markdown_reader.length; i++) {
+          if (markdown_reader[i].startsWith('@img=')) {
+            let img = markdown_reader[i].replace('@img=', '');
+            let id = Math.floor(Math.random() * 89999999999999999) + 10000000000000000;
+            marked_message += `
+            <div id="attachment${id}" class="attachment" style="max-width: 30%; max-height: 10%; min-width: 1%; min-height: 0%; height: auto; border-radius: .5vw;">
+              <img id="attachment${id}img" src="${img}" style="width: 100%; height: 100%; border-radius: .5vw;">
+            </div>
+            `;
+
+            //https://cdn.discordapp.com/attachments/1044426928611926038/1050293709410947142/Screenshot_20221128-164016_Twitter.jpg
+          } else {
+            unmarked_message += markdown_reader[i] + ' ';
+          }
         }
+
+        document.getElementById('message' + message.id).querySelector('#message-content').insertAdjacentText('beforeend', unmarked_message);
+        document.getElementById('message' + message.id).querySelector('#attachments').insertAdjacentHTML('beforeend', marked_message);
 
         document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
       }
@@ -187,6 +212,14 @@
         let username = document.getElementById('usernameInput').value;
 
         // profiling
+
+        let avatar = '';
+
+        if (document.getElementById('avatarInput').value.length > 0) {
+          avatar = document.getElementById('avatarInput').value;
+        } else {
+          avatar = 'https://cdn.discordapp.com/embed/avatars/0.png';
+        }
         
         if (username.length < 1) {
           username = 'Anonymous';
@@ -197,6 +230,7 @@
           content: message,
           timestamp: new Date(),
           family_gathering: localStorage.getItem('family_gathering'),
+          avatar: avatar,
         }
 
         document.getElementById('messageInput').value = '';
@@ -226,7 +260,8 @@
       });
 
       io().on('family_gathering', function(data) {
-        localStorage.setItem('family_gathering', data);
+        localStorage.setItem('family_gathering', data.family);
+        localStorage.setItem('identifier', data.identifier);
       });
 
       io().on('slow_down', function(data) {
