@@ -71,13 +71,15 @@ app.post('/data', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  socket.emit('family_gathering', socket.client.id);
+  let userid = Math.floor(Math.random() * 89999999999999999) + 10000000000000000;
+  socket.emit('family_gathering', { family: socket.client.id, identifier: userid });
   console.log('a user connected');
   let socketID = socket.client.id;
   socket.join(socketID);
 
   let socketData = {
     id: socketID,
+    userid: userid,
     lastMessage: 0,
   }
 
