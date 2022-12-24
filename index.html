@@ -1,172 +1,300 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+<!DOCTYPE html>
 
-:root {
-    --top: 1vw;
+<html lang="en">
+  <head>
+    <title>Chat Site</title>
+    <meta charset="utf-8" />
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <!-- get socket io from server -->
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
 
-    --greymain: hsl(220, 8%, 23%);
-    --greysecondary: hsl(218, 8%, 27%);
-    --greytertiary: hsl(217, 8%, 19%);
-    --greyquaternary: hsl(223, 7%, 20%);
-    --greyquinary: hsl(220, 7%, 17%);
-    --greysenary: hsl(216, 7%, 14%);
-    --greyseptenary: hsl(220, 5%, 35%);
-    --greyoctonary: hsl(0, 2%, 56%);
+   <body>
+    <section id="containerDisplay">
+      <section id="columnContainerServers">
+         
+      </section>
 
-    --transparent: hsla(0, 0%, 100%, 0);
+      <section id="containerServer">
+        <section id="containerList">
+          <section id="containerListHeader">
+            <h2 id="serverName">
 
-    --white: hsl(0, 0%, 100%);
-    --black: hsl(0, 0%, 0%);
+            </h2>
+          </section>
 
-    --blurplemain: hsl(235, 86%, 77%);
-    --blurplesecondary: hsl(235, 77%, 63%);
-    --blurpletertiary: hsl(233, 64%, 57%);
-    --blurplequaternary: hsl(238, 68%, 54%);
-    --blurplequinary: hsl(238, 64%, 50%);
+            <section id="containerListBody">
+              <section id="severBody">
+                <section class="messageBody">
+                  <section id="messagesHeader">
 
-    --posfix: translate(-50%, -50%);
-    --middle: 50%;
-}
+                  </section>
 
-body {
-    margin: 0;
-    scrollbar-width: none;
-    overflow-x: hidden;
+                  <section id="username">
+                    <input type="text" id="usernameInput" placeholder="Username" maxlength="20" />
+                  </section>
 
-    font-family: 'Inter', sans-serif;
+                  <section id="avatar">
+                    <input type="text" id="avatarInput" placeholder="Avatar URL" />
+                  </section>
 
-    background-color: var(--greysenary);
-    color: var(--white);
-}
+                  <nav>
+                    <ul>
 
-body::-webkit-scrollbar {
-    display: none;
-}
+                    </ul>
+                  </nav>
 
-section {
-    height: 100%;
-    width: 100%;
-}
+                  <section id="messagesFooter">
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    margin-top: 29vh;
-}
+                  </section>
 
-ul li {
-    padding: .1vw;
-    margin: .5vw;
-    border-radius: .1vw;
-    cursor: pointer;
-    font-size: calc(.5vw + .5vh + .5vmin);
-}
+                  <section id="messageFooter">
 
-#message { display: flex; flex-direction: column; justify-content: left; align-items: left; border-radius: .2vw; padding: 1vw; padding-top: 0px; top: 1vw; position: relative; height: 100%; width: 96.5%; transition: .3s; margin-top: 1.5vh; }
+                  </section>
+                </section>
 
-#message-head { margin-top: 0; margin-left: 7vw; }
+                <section id="messageHeader">
 
-    #useravi { width: 3.7vw; height: 3.7vw; border-radius: 50%; margin-left: 1.5vw; margin-top: 3vh; position: absolute; }
+                </section>
+                      
+                <section id="messagesContainer">
+                  <section id="inputContainer">
+                    <textarea id="messageInput" placeholder="Message #TextChat"></textarea>
+                  </section>
+                          
+                  <section id="buttonContainer">
+                    <a id="messageSend">
+                      <svg id="messageButton" xmlns="http://www.w3.org/2000/svg" version="1.0" width="50.000000pt" height="50.000000pt" viewBox="0 0 40 40" preserveAspectRatio="xMidYMid meet">
+                        <g id="sendVector"  transform="translate(0.000000,32.000000) scale(0.100000,-0.100000)" style="opacity: 50%; stroke: 0; fill: #fff;">
+                        <path d="M91 200 c9 -24 17 -30 40 -30 16 0 29 -4 29 -10 0 -5 -13 -10 -29 -10 -23 0 -31 -6 -40 -30 -5 -16 -6 -30 -2 -30 18 0 141 61 141 70 0 9 -123 70 -141 70 -4 0 -3 -13 2 -30z"/>
+                      </g>
+                    </svg>
+                  </a>
 
-    #timestamp { font-size: 1vw; color: var(--greyseptenary); }
+                  <a id="messageAttach">
+                    <svg width="24" height="24" viewBox="0 0 24 24"><path class="attachVector" fill="currentColor" d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z" style="opacity: 50%; stroke: 0; fill: #fff;"></path>></path></svg>
+                  </a>
+                </section>
+              </section>
+            </section>
 
-    #timestampHint { font-size: 1vw; color: var(--white); width: fit-content; height: fit-content; padding: .8vw; border-radius: .2vw; background-color: var(--greysenary); position: relative; left: -15vw; top: -6vh; opacity: 100%; box-shadow: 0 0 1vw var(--greysenary); opacity: 0; pointer-events: none; transition: .3s; z-index: 99999; }
+            <section id="containerHeader">
 
-        .attachment { margin-top: 0vh; margin-left: 2vw; width: 20vw; height: 20vw; border-radius: .2vw; background-color: var(--greyquaternary); }
+            </section>
+          </section>
+        </section> 
+      </section>
+    </section>
 
-        #timestamp:hover #timestampHint { opacity: 100%; }
+    <script type='text/javascript' async defer>
+      function addMessage(message) {
+        console.log(message.id)
 
-    #timestampHintArrow { font-size: 1vw; color: var(--greysenary); width: 1vw;  height: 1vw; border-radius: .2vw; background-color: var(--greysenary); position: absolute; left: 50%; top: 80%; opacity: 100%; transform: rotate(45deg); z-index: -1; }
+        let msgs = document.querySelector('nav ul');
 
+        let date = new Date(message.timestamp);
+        let now = new Date();
+        let diff = now - date;
+        let days = Math.floor(diff / 1000 / 60 / 60 / 24);
 
-#message-content { margin-top: -.8vh; margin-left: 7vw; }
-    .rainbow { background-image: linear-gradient(100deg, #FF0000, #CCFF00, #00FF66, #0066FF, #CC00FF); background-size: 100%; background-repeat: repeat; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; -moz-background-clip: text; -moz-text-fill-color: transparent; white-space: wrap; }
+        let tmp = '';
 
-#footer { bottom: 0; position: relative; height: 11vh; width: 100%; background-color: var(--greymain); }
+        if (days > 0) {
+          tmp = date.toLocaleDateString();
+        }
 
-    #containerDisplay { height: 100%; width: 100%; position: fixed; z-index: 1; }
+        let hrs = new Date().getHours();
+        let mins = new Date().getMinutes();
+        let stamp = '';
+        if (hrs > 12) {
+          hrs -= 12;
+          stamp = 'PM';
+        } else {
+          stamp = 'AM';
+        }
 
-        #columnContainerServers { height: 100%; width: 50px; position: absolute; left: 0; top: 1.3vw; background-color: var(--greysenary); z-index: -1; }
+        if (hrs < 10) {
+          hrs = '0' + hrs;
+        }
 
-        #containerServer { width: 100%; height: 100%; position: fixed; left: 0; top: 0; background-color: var(--transparent); }
+        if (mins < 10) {
+          mins = '0' + mins;
+        }
 
-            #containerList { width: 20vw; height: 100%; background-color: var(--greyquaternary); position: absolute; }
+        let newDate = '';
+        if (tmp.length > 0) {
+          newDate = tmp;
+        } else {
+          newDate = 'Today at ' + hrs + ':' + mins + ' ' + stamp;
+        }
 
-              #username { position: fixed; top: 89vh; left: 0vw; transform: var(--posfix); z-index: 99999; bottom: 3vh; left: 2vw; background-color: var(--greyquinary); width: 14vw; height: 6vh; border-radius: .4vw; margin-left: 6.4vw; margin-top: 5vh; }
+        let inner = `
+        <li id="message${message.id}">
+          <div id="useravi" style="background-image: url('${message.avatar}'); background-repeat: repeat; background-size: 100%; background-position: center;"></div>
+          <div id="message-head">
+            <h2>${message.name}    <span id="timestamp">${newDate}</span></h2>
+            </div>
 
-                #usernameInput { width: 12.2vw; height: 4vh; position: relative; top: 38%; left: 50%; transform: var(--posfix); background-color: var(--transparent); z-index: 4; color: var(--white); border: none; border-radius: .4vw; font-size: 1vw; letter-spacing: .08vw; }
+            <div id="message-content"> 
+            </div>
 
-                    #usernameInput:focus { outline: none; }
+            <div id="attachments" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: center; align-content: center;margin-left: 5vw;">
+        </li>
+        `
+        
+        let hint = `
+        <span id="timestampHint">
+          <div id="timestampHintArrow">.</div>
+          <span id="hintText">${date.toLocaleDateString('en-US', { weekday: 'long' })}, ${date.toLocaleDateString('en-US', { day: 'numeric' })} ${date.toLocaleDateString('en-US', { month: 'long' })} ${date.toLocaleDateString('en-US', { year: 'numeric' })} ${hrs+":"+mins}<span>
+        </span>
+        `
 
-                #avatar { position: fixed; top: 79vh; left: 0vw; transform: var(--posfix); z-index: 99999; bottom: 3vh; left: 2vw; background-color: var(--greyquinary); width: 14vw; height: 6vh; border-radius: .4vw; margin-left: 6.4vw; margin-top: 5vh; }
+        msgs.insertAdjacentHTML('beforeend', inner);
 
-                #avatarInput { width: 12.2vw; height: 4vh; position: relative; top: 38%; left: 50%; transform: var(--posfix); background-color: var(--transparent); z-index: 4; color: var(--white); border: none; border-radius: .4vw; font-size: 1vw; letter-spacing: .08vw;}
+        let timestamp = document.getElementById('message' + message.id).querySelector('#timestamp');
 
-                    #avatarInput:hover { cursor: pointer; }
+        timestamp.insertAdjacentHTML('beforeend', hint);
 
-                #containerListHeader { width: 20vw; height: 8vh; background-color: var(--greyquaternary); position: absolute; box-shadow: 0px .1vw .5vw  var(--greysenary); top: 0; }
+        let content = document.getElementById('message' + message.id).querySelector('#message-content');
 
-                    #serverName { font-size: 20px; position: relative; top: 25%; left: 56%; transform: var(--posfix); }
+        let markdown_reader = message.content.split(' ');
 
-            #containerListBody { width: 83%; height: 100%; position: fixed; background-color: var(--greymain); top: 0; right: 0; }
+        let marked_message = '';
+        let unmarked_message = '';
+        for (let i = 0; i < markdown_reader.length; i++) {
+          if (markdown_reader[i].startsWith('@img=')) {
+            let img = markdown_reader[i].replace('@img=', '');
+            let id = Math.floor(Math.random() * 89999999999999999) + 10000000000000000;
+            marked_message += `
+            <div id="attachment${id}" class="attachment" style="max-width: 30%; max-height: 10%; min-width: 1%; min-height: 0%; height: auto; border-radius: .5vw;">
+              <img id="attachment${id}img" src="${img}" style="width: 100%; height: 100%; border-radius: .5vw;">
+            </div>
+            `;
 
-                #containerHeader { width: 83%; background-color: var(--greymain); position: fixed; right: 0; height: 8vh; box-shadow: .1vw .1vw .5vw  var(--greysenary); }
+            //https://cdn.discordapp.com/attachments/1044426928611926038/1050293709410947142/Screenshot_20221128-164016_Twitter.jpg
+          } else {
+            unmarked_message += markdown_reader[i] + ' ';
+          }
+        }
 
-                #coverBar { width: 2vw; height: 10vh; position: fixed; left: 20%; top: 20%; background-color: var(--greymain); }
+        document.getElementById('message' + message.id).querySelector('#message-content').insertAdjacentText('beforeend', unmarked_message);
+        document.getElementById('message' + message.id).querySelector('#attachments').insertAdjacentHTML('beforeend', marked_message);
 
-                #messageHeader { top: 0; width: 80vw; height: 0vh; position: fixed; background-color: var(--greymain); }
+        document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
+      }
 
-                #severBody { width: 83%; height: 100vh; right: 0; bottom: 0vw; background-color: var(--transparent); position: fixed; box-shadow: 1px 1px 5px var(--greysenary); overflow-y: scroll; padding-bottom: 200px; scrollbar-width: none; scroll-padding: 50px 0 0 50px; }
+      function loadMessages(data) {
+        let textContainer = document.querySelector('nav ul');
+        textContainer.innerHTML = '';
 
-                #severBody::-webkit-scrollbar-track {
-                  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-                  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-                  border-radius: 10px;
-                  background-color: var(--transparent); 
-                }
-  
-                #severBody::-webkit-scrollbar {
-                  width: 0.5vw;
-                  background-color: #40444b;
-                  scroll-padding: 50px 0 0 50px;
-                }
-  
-                #severBody::-webkit-scrollbar-thumb {
-                  border-radius: 10px;
-                  -webkit-box-shadow: inset 0 0 6px rgba(177, 50, 50, 0.3);
-                  box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-                  background-color: var(--greysenary);
-                }
-                    
-                    #messageBody { width: 83%; height: 3vh; position: fixed; bottom: 0; right: 0; background-color: var(--blurplesecondary); opacity: 50%; overflow-y: scroll; padding-bottom: 5vh; scrollbar-width: none; margin-top: 1.5vh; }
+        console.log(data);
+        for (let message of data) {
+          addMessage(message);
+        }
+      }
 
-                        #messagesHeader { top: 0; width: 83%; height: 31vh; position: relative; }
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', '/data', true);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          loadMessages(data);
+        }
+      };
 
-                        #messageFooter { bottom: 0; position: fixed; height: 8vh; width: 100vw; background-color: var(--greymain); }
+      xhr.send();
 
-                    #messagesContainer { bottom: 1.5vw; right: 2vw; width: 79.2vw; height: calc(0.5vw + 5vh); background-color: var(--greysecondary); position: fixed; border-radius: .4vw; }
+      let submitButton = document.getElementById('messageSend');
+      submitButton.addEventListener('click', function() {
+        let message = document.getElementById('messageInput').value;
+        let username = document.getElementById('usernameInput').value;
 
-                      #messagesFooter { bottom: 0; position: relative; height: 11vh; width: calc(50vw + 50vh); background-color: var(--transparent); }
+        // profiling
 
-                        #inputContainer { width: calc(30vw + 30vh); height: 4vh; position: fixed; background-color: var(--transparent); opacity: 50%; margin-top: 0.5vw; margin-left: 3vw; border-radius: .8vw; }
+        let avatar = '';
 
-                            #warning { position: absolute; z-index: 2; left: -3vw; bottom: -3.5vh; background-color: var(--transparent); pointer-events: none; width: fit-content; height: fit-content; color: rgba(255, 84, 84, 0.911); font-size: calc(.5vw + 1vh); font-weight: 300; }
+        if (document.getElementById('avatarInput').value.length > 0) {
+          avatar = document.getElementById('avatarInput').value;
+        } else {
+          avatar = 'https://cdn.discordapp.com/embed/avatars/0.png';
+        }
+        
+        if (username.length < 1) {
+          username = 'Anonymous';
+        }
 
-                            #messageInput { width: inherit; height: inherit; background-color: var(--transparent); position: fixed; border-radius: .8vw; outline: none; border: none; resize: none; overflow: hidden; font-size: calc(.5vw + 1.7vh); padding-left: .5vw; padding-top: .5vh; color: var(--white); font-weight: 100; }
+        let upr = {
+          name: username,
+          content: message,
+          timestamp: new Date(),
+          family_gathering: localStorage.getItem('family_gathering'),
+          avatar: avatar,
+        }
 
-                        #buttonContainer { height: inherit; width: 5vw; right: 2vw; position: fixed; background-color: var(--transparent) }
+        document.getElementById('messageInput').value = '';
 
-                            #messageSend { position: fixed; z-index: 2; right: 3vw; bottom: calc(1.2vw + 1.1vh); background-color: var(--transparent); transition: .3s; pointer-events: all; width: 5vh; height: 5vh; border-radius: 100%; }
+        let xhr = new XMLHttpRequest();
 
-                                #messageButton { position: absolute; z-index: 3; left: 0vw; top: 0vh; transition: .3s; offset-position: 0; background-color: var(--transparent); letter-spacing: 2px; opacity: 20%; width: 130%; height: 130%;  } 
-                                    
-                                    #sendVector { transition: .3s; pointer-events: none; }
+        xhr.open('POST', '/data', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('data=' + encodeURIComponent(JSON.stringify(upr)));
 
-                            #messageAttach { position: fixed; z-index: 2; right: 5.5vw; bottom: calc(1.9vw + 2vh); background-color: var(--transparent); transition: .3s; pointer-events: all; width: 2.5vh; height: 2.5vh; border-radius: 100%; }
+        document.getElementById('messageButton').style = 'fill: #949cf7; opacity: 20%';
 
-                                #attachVector { transition: .3s; pointer-events: none; }
+        document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
 
-/*#949cf7*/
+        document.getElementById('messageInput').focus();
+      });
 
-#messageInput:focus { outline: none; }
-#message:hover { background-color: var(--greytertiary); }
+      document.getElementById('messageInput').addEventListener('keydown', function(e) {
+        if (e.keyCode === 13) {
+          document.getElementById('messageSend').click();
+        }
+      });
+
+      io().emit('message', 'hello world');
+      io().on('update', function(data) {
+        loadMessages(data);
+      });
+
+      io().on('family_gathering', function(data) {
+        localStorage.setItem('family_gathering', data.family);
+        localStorage.setItem('identifier', data.identifier);
+      });
+
+      io().on('slow_down', function(data) {
+
+        if (localStorage.getItem('family_gathering') == data ) {
+
+          console.log('wait');
+          let warning = `
+          <span id="warning">
+            ◕ You are sending messages too fast. Slow down!
+          </span>
+          `
+
+          let cont = document.getElementById('inputContainer');
+          cont.insertAdjacentHTML('beforeend', warning);
+
+          setTimeout(function() {
+            document.getElementById('warning').remove();
+          }, 3000);
+        }
+      });
+    </script>
+
+    <script defer>
+      var isInput = false;
+
+      document.getElementById('messageInput').addEventListener('input', function() { if (this.value.length > 0) { isInput = true; } else { isInput = false; } document.getElementById('messageButton').style.opacity = event.target.value.length > 0 ? 1 : 0.3 })
+
+      document.getElementById('messageSend').addEventListener('mouseover', function() { if (isInput) { document.getElementById('sendVector').style = 'fill: #949cf7; opacity: 100%; cursor: pointer;'; document.getElementById('buttonContainer').style = 'cursor: pointer;' } })
+
+      document.getElementById('messageSend').addEventListener('mouseout', function() { if (isInput) { document.getElementById('sendVector').style = 'fill: #fff; opacity: 100%;'; document.getElementById('buttonContainer').style = 'cursor: pointer;' } })
+
+      document.getElementById('severBody').scroll({ top: document.getElementById('severBody').scrollHeight });
+    </script>
+  </body>
+</html>
