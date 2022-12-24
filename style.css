@@ -72,7 +72,7 @@ ul li {
 
     #timestampHint { font-size: 1vw; color: var(--white); width: fit-content; height: fit-content; padding: .8vw; border-radius: .2vw; background-color: var(--greysenary); position: relative; left: -15vw; top: -6vh; opacity: 100%; box-shadow: 0 0 1vw var(--greysenary); opacity: 0; pointer-events: none; transition: .3s; z-index: 99999; }
 
-        .attachment { margin-top: 2vh; margin-left: 2vw; width: 20vw; height: 20vw; border-radius: .2vw; background-color: var(--greyquaternary); }
+        .attachment { margin-top: 0vh; margin-left: 2vw; width: 20vw; height: 20vw; border-radius: .2vw; background-color: var(--greyquaternary); }
 
         #timestamp:hover #timestampHint { opacity: 100%; }
 
@@ -81,6 +81,7 @@ ul li {
 
 #message-content { margin-top: -.8vh; margin-left: 7vw; }
     .rainbow { background-image: linear-gradient(100deg, #FF0000, #CCFF00, #00FF66, #0066FF, #CC00FF); background-size: 100%; background-repeat: repeat; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; -moz-background-clip: text; -moz-text-fill-color: transparent; white-space: wrap; }
+
 #footer { bottom: 0; position: relative; height: 11vh; width: 100%; background-color: var(--greymain); }
 
     #containerDisplay { height: 100%; width: 100%; position: fixed; z-index: 1; }
