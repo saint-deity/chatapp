@@ -162,12 +162,11 @@ ul li {
                                     
                                     #sendVector { transition: .3s; pointer-events: none; }
 
-                            #messageAttach { position: fixed; z-index: 2; right: 5.5vw; bottom: calc(1.9vw + 2vh); background-color: var(--transparent); transition: .3s; pointer-events: all; width: 2vh; height: 2vh; border-radius: 0%; border: none; font-size: 0vw; margin-top: 1vh; }
+                            #messageAttach { position: fixed; z-index: 2; right: 5.5vw; bottom: 4.5vh; background-color: var(--transparent); transition: .3s; pointer-events: all; width: 2.4vh; height: 2.4vh; border-radius: 0%; border: none; font-size: 0vw; }
 
                                 #messageAttach::-webkit-file-upload-button { display: none; }
+                                #messageAttach::file-selector-button { opacity: 0%; left: -20%; position: absolute; width: 2.4vh; height: 2.4vh;  }
                                 #messageAttach::-webkit-input-placeholder { display: none; }
-
-                                #attachVector { transition: .3s; pointer-events: none; }
 
 /*#949cf7*/
 
